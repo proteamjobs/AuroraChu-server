@@ -3,16 +3,19 @@ const db = {};
 const fs = require("fs");
 const path = require("path");
 const basename = path.basename(__filename);
+const configDataBase = require("../config/config.json").database;
 require("dotenv").config();
 
-const DATABASE = process.env.DB_DATABASE;
-const USERNAME = process.env.DB_USERNAME;
-const PASSWORD = process.env.DB_PASSWORD;
+const NODE_ENV = process.env.NODE_ENV;
+
+const DATABASE = configDataBase[NODE_ENV].database;
+const USERNAME = configDataBase[NODE_ENV].username;
+const PASSWORD = configDataBase[NODE_ENV].password;
 
 const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: process.env.DB_DIALECT,
-  port: process.env.DB_PORT,
+  host: configDataBase[NODE_ENV].host,
+  dialect: configDataBase[NODE_ENV].dialect,
+  port: configDataBase[NODE_ENV].port,
   timezone: "Asia/Seoul",
   define: {
     timestamps: true
