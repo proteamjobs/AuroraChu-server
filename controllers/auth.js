@@ -23,13 +23,6 @@ module.exports = {
           });
         } else {
           req.logIn(user, err => {
-            // if (err) {
-            //   return res.status(201).send("ERROR ! /auth/login : ", {
-            //     success: false,
-            //     message: null,
-            //     error: err
-            //   });
-            // }
             // Sequlize DB Serch
             db.users
               .findOne({
@@ -61,6 +54,33 @@ module.exports = {
         }
       })(req, res, next);
       //   res.send("/auth/login");
+    }
+  },
+  me: {
+    get: (req, res, next) => {
+      passport.authenticate("jwt", { session: false }, (err, user, info) => {
+        if (err) {
+          res.status(200).send("ERROR !! /auth/me : ", {
+            success: false,
+            message: null,
+            error: err
+          });
+        }
+        if (info !== undefined) {
+          res.status(201).send({
+            success: false,
+            message: info.message,
+            error: err
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            message: null,
+            error: err,
+            user
+          });
+        }
+      })(req, res, next);
     }
   }
 };
