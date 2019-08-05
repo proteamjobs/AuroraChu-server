@@ -12,4 +12,7 @@ router.get("/:user_id", function(req, res, next) {
 });
 router.get("/test", controllers.users.test.get);
 
+// router.post("/:user_id", controllers.users.post);
+router.post("/", controllers.users.post);
+
 module.exports = router;
