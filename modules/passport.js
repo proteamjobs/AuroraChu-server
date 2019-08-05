@@ -77,3 +77,40 @@ passport.use(
     }
   )
 );
+
+passport.use(
+  "login",
+  new localStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      session: false
+    },
+    (email, password, done) => {
+      try {
+        db.users
+          .findOne({
+            where: {
+              email: email
+            }
+          })
+          .then(user => {
+            if (user === null) {
+              return done(null, false, { message: "Not user!" });
+            } else {
+              bcrypt.compare(password, user.password).then(response => {
+                if (response !== true) {
+                  return done(null, false, {
+                    message: "Password do not match!"
+                  });
+                }
+                return done(null, user);
+              });
+            }
+          });
+      } catch (err) {
+        done(err);
+      }
+    }
+  )
+);
