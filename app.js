@@ -5,6 +5,7 @@ var logger = require("morgan");
 const passport = require("passport");
 
 var indexRouter = require("./routes/index");
+let authRouter = require("./routes/auth");
 var usersRouter = require("./routes/users");
 let marketersRouter = require("./routes/marketers");
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/marketers", marketersRouter);
 
