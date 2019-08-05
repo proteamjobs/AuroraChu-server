@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const BCRIPT_SALT_ROUNDS = 12;
-const jwtSecret = process.env.PW_SECRET_KEY;
+const jwtSecret = require("../config/config.json").PW_SECRET_KEY;
 
 const db = require("../models");
 const bcrypt = require("bcrypt");
