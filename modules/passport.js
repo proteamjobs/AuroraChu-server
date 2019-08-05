@@ -114,3 +114,30 @@ passport.use(
     }
   )
 );
+
+const opts = {
+  jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme("JWT"),
+  secretOrKey: jwtSecret
+};
+passport.use(
+  "jwt",
+  new JWTstrategy(opts, (jwt_payload, done) => {
+    try {
+      db.users
+        .findOne({
+          where: {
+            email: jwt_payload.email
+          }
+        })
+        .then(user => {
+          if (user) {
+            done(null, user);
+          } else {
+            done(null, false, { message: "User not found in DB!" });
+          }
+        });
+    } catch (err) {
+      done(err);
+    }
+  })
+);
