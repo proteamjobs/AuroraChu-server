@@ -85,14 +85,7 @@ module.exports = {
   },
   verify: {
     get: async (req, res, next) => {
-      console.log(req.query.email);
-      if (!Object.keys(req.query).length) {
-        res.status(200).json({
-          success: true,
-          message: null,
-          err: "Usage is wrong API."
-        });
-      } else {
+      if (req.query.email !== undefined) {
         await db.users
           .findAndCountAll({
             where: {
@@ -100,7 +93,6 @@ module.exports = {
             }
           })
           .then(user => {
-            console.log(user.count);
             if (!user.count) {
               res.status(200).json({
                 success: true,
@@ -115,6 +107,12 @@ module.exports = {
               });
             }
           });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: null,
+          err: "Usage is wrong API."
+        });
       }
     }
   }
