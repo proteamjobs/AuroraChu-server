@@ -86,28 +86,36 @@ module.exports = {
   verify: {
     get: async (req, res, next) => {
       console.log(req.query.email);
-      await db.users
-        .findAndCountAll({
-          where: {
-            email: req.query.email
-          }
-        })
-        .then(user => {
-          console.log(user.count);
-          if (!user.count) {
-            res.status(200).json({
-              success: true,
-              message: "OK",
-              err: null
-            });
-          } else {
-            res.status(200).json({
-              success: false,
-              message: "Already user.",
-              err: null
-            });
-          }
+      if (!Object.keys(req.query).length) {
+        res.status(200).json({
+          success: true,
+          message: null,
+          err: "Usage is wrong API."
         });
+      } else {
+        await db.users
+          .findAndCountAll({
+            where: {
+              email: req.query.email
+            }
+          })
+          .then(user => {
+            console.log(user.count);
+            if (!user.count) {
+              res.status(200).json({
+                success: true,
+                message: "OK",
+                err: null
+              });
+            } else {
+              res.status(200).json({
+                success: false,
+                message: "Already user.",
+                err: null
+              });
+            }
+          });
+      }
     }
   }
 };
