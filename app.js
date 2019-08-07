@@ -3,7 +3,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const passport = require("passport");
-
+const cors = require("cors");
 var indexRouter = require("./routes/index");
 let authRouter = require("./routes/auth");
 var usersRouter = require("./routes/users");
@@ -24,7 +24,7 @@ db.sequelize
 
 var app = express();
 require("./modules/passport");
-
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
