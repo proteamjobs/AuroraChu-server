@@ -22,6 +22,7 @@ passport.use(
       session: false
     },
     (req, email, password, done) => {
+      console.log(req.body);
       try {
         db.users
           .findOne({
@@ -62,7 +63,8 @@ passport.use(
                         email: email,
                         password: hashedPassword,
                         nickname: getNickname,
-                        provider: "aurora"
+                        provider: "aurora",
+                        is_marketing_agree: req.body.marketingReceiveAgree
                       })
                       .then(user => {
                         return done(null, user);

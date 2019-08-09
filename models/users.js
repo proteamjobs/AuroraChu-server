@@ -54,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 1,
         allowNull: false
       },
+      is_marketing_agree: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
       createdAt: {
         type: "TIMESTAMP",
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
