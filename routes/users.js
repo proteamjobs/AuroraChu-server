@@ -11,6 +11,7 @@ router.get("/:user_id", function(req, res, next) {
   res.send(`users/${req.params.user_id} Users Request.`);
 });
 router.get("/test", controllers.users.test.get);
+router.put("/password", controllers.users.password.put);
 
 // router.post("/:user_id", controllers.users.post);
 router.post("/", controllers.users.post);
