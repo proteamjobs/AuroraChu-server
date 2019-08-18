@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 const db = require("../models");
 
 module.exports = (sequelize, DataTypes) => {
-  const users = sequelize.define(
-    "users",
+  const videos = sequelize.define(
+    "videos",
     {
       _id: {
         type: DataTypes.INTEGER,
@@ -11,53 +11,21 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      email: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      password: {
+      src: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      nickname: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      provider: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      status: {
-        type: DataTypes.INTEGER,
-        defaultValue: 1,
-        allowNull: false
-      },
-      profile_url: {
-        type: DataTypes.STRING,
-        defaultValue:
-          "https://fetch-image-server.s3.ap-northeast-2.amazonaws.com/default/defaultProfile.png",
-        allowNull: false
-      },
-      account: {
-        type: DataTypes.STRING,
+      description: {
+        type: DataTypes.TEXT,
         allowNull: true
       },
-      phone_num: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
-      test_score: {
+      next: {
         type: DataTypes.INTEGER,
         allowNull: true
-      },
-      is_current_member: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 1,
-        allowNull: false
-      },
-      is_marketing_agree: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
       },
       createdAt: {
         type: "TIMESTAMP",
@@ -75,14 +43,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  users.associate = function(models) {
-    users.belongsToMany(models.videos, {
+  videos.associate = function(models) {
+    videos.belongsToMany(models.users, {
       through: "videos_processes",
-      foreignKey: "user_id"
+      foreignKey: "video_id"
     });
   };
 
-  return users;
+  return videos;
 };
 
 // users.hasMany(models.orders, {
