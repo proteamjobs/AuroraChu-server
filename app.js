@@ -4,15 +4,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const passport = require("passport");
 const cors = require("cors");
-var indexRouter = require("./routes/index");
+let indexRouter = require("./routes/index");
 let authRouter = require("./routes/auth");
-var usersRouter = require("./routes/users");
+let usersRouter = require("./routes/users");
 let marketersRouter = require("./routes/marketers");
+let videosRouter = require("./routes/videos");
 
 let db = require("./models/index.js");
 db.sequelize
-  .sync()
-  // .sync({ alter: true })
+  // .sync()
+  .sync({ alter: true })
   // .sync({ force: true })
   .then(() => {
     console.log(" DB Connect!");
@@ -36,5 +37,6 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/marketers", marketersRouter);
+app.use("/videos", videosRouter);
 
 module.exports = app;
