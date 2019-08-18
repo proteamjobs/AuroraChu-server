@@ -8,6 +8,9 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 
 module.exports = {
+  get: (req, res) => {
+    res.send("GET /users");
+  },
   post: (req, res, next) => {
     // res.send(`${req.params}, ${req.query}, ${jwtSecret}`);
     passport.authenticate("register", (err, user, info) => {
