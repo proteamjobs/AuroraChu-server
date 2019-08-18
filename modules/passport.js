@@ -32,7 +32,9 @@ passport.use(
           })
           .then(async user => {
             if (user !== null) {
-              return done(null, false, { message: "This user is already!" });
+              return done(null, false, {
+                message: "이미 존재하는 계정입니다."
+              });
             } else {
               let getNickname = await getRandomNickName(email.split("@")[0]);
               if (password === "SocIaL") {
@@ -98,12 +100,16 @@ passport.use(
           })
           .then(user => {
             if (user === null) {
-              return done(null, false, { message: "Not user!" });
+              return done(null, false, {
+                message: "존재하지 않는 계정입니다."
+              });
+            } else if (!user.is_current_member) {
+              return done(null, false, { message: "이미 삭제된 계정입니다." });
             } else {
               bcrypt.compare(password, user.password).then(response => {
                 if (response !== true) {
                   return done(null, false, {
-                    message: "Password do not match!"
+                    message: "올바르지 않은 비밀번호 입니다."
                   });
                 }
                 return done(null, user);
@@ -135,7 +141,7 @@ passport.use(
           if (user) {
             done(null, user);
           } else {
-            done(null, false, { message: "User not found in DB!" });
+            done(null, false, { message: "계정을 찾을 수 없습니다." });
           }
         });
     } catch (err) {

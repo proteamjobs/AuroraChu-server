@@ -3,9 +3,11 @@ const router = express.Router();
 const controllers = require("../controllers");
 
 /* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("All Users Request.");
-});
+// router.get("/", function(req, res, next) {
+//   res.send("All Users Request.");
+// });
+
+router.get("/", controllers.users.get);
 router.get("/:user_id", function(req, res, next) {
   console.log(req.params);
   res.send(`users/${req.params.user_id} Users Request.`);

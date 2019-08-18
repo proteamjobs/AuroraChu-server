@@ -31,7 +31,6 @@ module.exports = {
                 }
               })
               .then(user => {
-                console.log(jwtSecret);
                 // Make JWT
                 const token = jwt.sign(
                   {
@@ -41,6 +40,7 @@ module.exports = {
                   },
                   jwtSecret
                 );
+
                 res.status(201).send({
                   success: true,
                   message: null,
@@ -73,6 +73,12 @@ module.exports = {
             error: err
           });
         } else {
+          let responseData = {
+            _id: user._id,
+            email: user.email,
+            nickname: user.nickname,
+            profile_url: user.profile_url
+          };
           res.status(200).json({
             success: true,
             message: null,
