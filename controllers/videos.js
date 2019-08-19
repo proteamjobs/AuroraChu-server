@@ -112,7 +112,7 @@ module.exports = {
                   where: { user_id: user._id, video_id: req.params.video_id }
                 })
                 .then(data => {
-                  if (data) {
+                  if (data.count) {
                     res.status(201).send({
                       success: false,
                       message: "이미 존재하는 데이터 입니다.",
