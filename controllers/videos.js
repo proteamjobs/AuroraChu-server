@@ -31,6 +31,7 @@ module.exports = {
                 return {
                   video_id: data._id,
                   title: data.title,
+                  src: data.src,
                   description: data.description,
                   next: data.next,
                   isComplete: true
@@ -39,6 +40,7 @@ module.exports = {
                 return {
                   video_id: data._id,
                   title: data.title,
+                  src: data.src,
                   description: data.description,
                   next: data.next,
                   isComplete: false
