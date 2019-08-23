@@ -86,7 +86,7 @@ module.exports = {
                         .then(() => {
                           res.status(200).json({
                             success: true,
-                            message: "Changed Password.",
+                            message: "성공적으로 비밀번호가 변경되었습니다.",
                             error: null
                           });
                         })
