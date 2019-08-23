@@ -73,17 +73,18 @@ module.exports = {
             error: err
           });
         } else {
-          let responseData = {
-            _id: user._id,
-            email: user.email,
-            nickname: user.nickname,
-            profile_url: user.profile_url
-          };
           res.status(200).json({
             success: true,
             message: null,
             error: err,
-            user
+            user: {
+              _id: user._id,
+              email: user.email,
+              nickname: user.nickname,
+              profile_url: user.profile_url,
+              status: user.status,
+              test_score: user.test_score
+            }
           });
         }
       })(req, res, next);
@@ -102,13 +103,13 @@ module.exports = {
             if (!user.count) {
               res.status(200).json({
                 success: true,
-                message: "OK",
+                message: "사용할 수 있는 계정입니다.",
                 err: null
               });
             } else {
               res.status(200).json({
                 success: false,
-                message: "Already user.",
+                message: "이미 존제하는 계정입니다.",
                 err: null
               });
             }
