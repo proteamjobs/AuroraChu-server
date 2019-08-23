@@ -199,14 +199,14 @@ module.exports = {
     put: (req, res, next) => {
       passport.authenticate("jwt", { session: false }, (err, user, info) => {
         if (err) {
-          res.status(200).send("ERROR !! /users/nickname : ", {
+          res.status(201).json("ERROR !! /users/nickname : ", {
             success: false,
             message: null,
             error: err
           });
         }
         if (info !== undefined) {
-          res.status(201).send({
+          res.status(201).json({
             success: false,
             message: info.message,
             error: err
