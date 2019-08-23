@@ -63,7 +63,7 @@ module.exports = {
             .then(() => {
               res.status(201).send({
                 success: true,
-                message: "",
+                message: "성공적으로 탈퇴되었습니다.",
                 error: err
               });
             })
