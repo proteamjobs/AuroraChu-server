@@ -8,6 +8,8 @@ const BCRIPT_SALT_ROUNDS = 12;
 const db = require("../models");
 const bcrypt = require("bcrypt");
 const AWS = require("aws-sdk");
+AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
+
 let s3 = new AWS.S3();
 
 module.exports = {
