@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       profile_url: {
         type: DataTypes.STRING,
         defaultValue:
-          "https://fetch-image-server.s3.ap-northeast-2.amazonaws.com/default/defaultProfile.png",
+          "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
         allowNull: false
       },
       account: {
