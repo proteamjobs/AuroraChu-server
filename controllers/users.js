@@ -1,11 +1,14 @@
 require("dotenv").config();
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const jwtSecret = process.env.PW_SECRET_KEY;
+
+// const jwt = require("jsonwebtoken");
+// const jwtSecret = process.env.PW_SECRET_KEY;
 const BCRIPT_SALT_ROUNDS = 12;
 
 const db = require("../models");
 const bcrypt = require("bcrypt");
+const AWS = require("aws-sdk");
+let s3 = new AWS.S3();
 
 module.exports = {
   get: (req, res) => {
@@ -245,6 +248,165 @@ module.exports = {
           }
         }
       })(req, res, next);
+    }
+  },
+  profile_img: {
+    put: (req, res, next) => {
+      passport.authenticate("jwt", { session: false }, (err, user, info) => {
+        if (err) {
+          res.status(201).json("ERROR !! /users/nickname : ", {
+            success: false,
+            message: null,
+            error: err
+          });
+        }
+        if (info !== undefined) {
+          res.status(201).json({
+            success: false,
+            message: info.message,
+            error: err
+          });
+        } else {
+          // res.status(201).json(user);
+
+          // console.log(req.file);
+          db.users
+            .findOne({
+              where: {
+                _id: user._id
+              }
+            })
+            .then(data => {
+              let oldProfileUrl = data.profile_url.split("img")[1].slice(1);
+              db.users
+                .update(
+                  { profile_url: req.file.location },
+                  {
+                    where: {
+                      _id: user._id
+                    }
+                  }
+                )
+                .then(() => {
+                  if (oldProfileUrl !== "defaultProfile.png") {
+                    s3.deleteObject(
+                      {
+                        Bucket: "wake-up-file-server/profile_img",
+                        Key: oldProfileUrl
+                      },
+                      function(err, data) {
+                        if (err) {
+                          res.status(201).json({
+                            success: false,
+                            message: "ERRORS3 delete",
+                            error: err
+                          });
+                        } else {
+                          res.status(201).json({
+                            success: true,
+                            message:
+                              "성공적으로 기존 프로필 이미지를 삭제하고 새로운 프로필 이미지로 등록하였습니다.",
+                            error: err
+                          });
+                        }
+                      }
+                    );
+                  } else {
+                    res.status(201).json({
+                      success: true,
+                      message: "새로운 프로필 이미지를 등록하였습니다.",
+                      error: null
+                    });
+                  }
+                })
+                .catch(err => {
+                  res.status(201).json({
+                    success: false,
+                    message: "ERROR : /users/profile_img update",
+                    error: err
+                  });
+                });
+            });
+        }
+      })(req, res, next);
+    },
+    default: {
+      put: (req, res, next) => {
+        passport.authenticate("jwt", { session: false }, (err, user, info) => {
+          if (err) {
+            res.status(201).json("ERROR !! /users/nickname : ", {
+              success: false,
+              message: null,
+              error: err
+            });
+          }
+          if (info !== undefined) {
+            res.status(201).json({
+              success: false,
+              message: info.message,
+              error: err
+            });
+          } else {
+            db.users
+              .findOne({
+                where: {
+                  _id: user._id
+                }
+              })
+              .then(data => {
+                let oldProfileUrl = data.profile_url.split("img")[1].slice(1);
+
+                if (oldProfileUrl === "defaultProfile.png") {
+                  res.status(201).json({
+                    success: false,
+                    message: "이미 기본 프로필 이미지 입니다.",
+                    error: null
+                  });
+                } else {
+                  db.users
+                    .update(
+                      {
+                        profile_url:
+                          "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png"
+                      },
+                      { where: { _id: user._id } }
+                    )
+                    .then(() => {
+                      s3.deleteObject(
+                        {
+                          Bucket: "wake-up-file-server/profile_img",
+                          Key: oldProfileUrl
+                        },
+                        function(err, data) {
+                          if (err) {
+                            res.status(201).json({
+                              success: false,
+                              message: "ERRORS3 delete",
+                              error: err
+                            });
+                          } else {
+                            res.status(201).json({
+                              success: true,
+                              message:
+                                "성공적으로 기존 프로필 이미지를 삭제하고 기본 프로필 이미지로 등록하였습니다.",
+                              error: err
+                            });
+                          }
+                        }
+                      );
+                    })
+                    .catch(err => {
+                      res.status(201).json({
+                        success: false,
+                        message: "ERROR : /users/profile_img/default",
+                        error: err
+                      });
+                    });
+                }
+              });
+          }
+        })(req, res, next);
+      }
     }
   },
   test: {
