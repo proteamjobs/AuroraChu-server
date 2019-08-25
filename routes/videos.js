@@ -6,5 +6,4 @@ let controllers = require("../controllers");
 router.get("/", controllers.videos.get);
 router.post("/:video_id/complete", controllers.videos.complete.post);
 // router.get("/me", controllers.auth.me.get);
-
 module.exports = router;
