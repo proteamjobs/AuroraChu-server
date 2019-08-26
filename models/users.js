@@ -80,6 +80,9 @@ module.exports = (sequelize, DataTypes) => {
       through: "videos_processes",
       foreignKey: "user_id"
     });
+    users.hasMany(models.marketer_applies, {
+      foreignKey: { name: "user_id", allowNull: false }
+    });
   };
 
   return users;

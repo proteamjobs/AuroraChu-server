@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      file_key: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       createdAt: {
         type: "TIMESTAMP",
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
@@ -41,8 +45,9 @@ module.exports = (sequelize, DataTypes) => {
 
   files.associate = function(models) {
     files.belongsTo(models.marketer_applies, {
-      foreignKey: "apply_id",
-      targetKey: "_id"
+      foreignKey: { name: "apply_id", allowNull: false },
+      targetKey: "_id",
+      onDelete: "cascade"
     });
   };
 
