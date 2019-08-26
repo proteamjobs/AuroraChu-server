@@ -5,6 +5,42 @@ module.exports = {
   get: (req, res, next) => {
     res.send("/applies");
   },
+  delete: (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info) => {
+      if (err) {
+        res.status(201).json("ERROR !! Delete /appies", {
+          success: false,
+          message: null,
+          error: err
+        });
+      }
+      if (info !== undefined) {
+        res.status(201).json({
+          success: false,
+          message: info.message,
+          error: err
+        });
+      } else {
+        db.marketer_applies
+          .destroy({ where: { user_id: user._id } })
+          .then(data => {
+            if (!data) {
+              res.status(201).json({
+                success: false,
+                message: "삭제할 내역이 없습니다.",
+                error: null
+              });
+            } else {
+              res.status(201).json({
+                success: true,
+                message: "성공적으로 삭제되었습니다.",
+                error: null
+              });
+            }
+          });
+      }
+    })(req, res, next);
+  },
   status: {
     get: (req, res, next) => {
       passport.authenticate("jwt", { session: false }, (err, user, info) => {
