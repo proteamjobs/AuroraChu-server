@@ -30,11 +30,7 @@ module.exports = {
           })
           .then(data => {
             if (!data.count) {
-              res.status(200).json({
-                success: true,
-                message: "신청이 가능합니다.",
-                error: null
-              });
+              next();
             } else {
               res.status(200).json({
                 success: false,

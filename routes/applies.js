@@ -22,6 +22,11 @@ let upload = multer({
 router.get("/status", controllers.applies.status.get);
 router.delete("/", controllers.applies.delete);
 router.get("/", controllers.applies.get);
-router.post("/", upload.array("arrayFile"), controllers.applies.post);
+router.post(
+  "/",
+  controllers.applies.get,
+  upload.array("arrayFile"),
+  controllers.applies.post
+);
 
 module.exports = router;
