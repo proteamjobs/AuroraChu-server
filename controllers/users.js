@@ -217,6 +217,7 @@ module.exports = {
             error: err
           });
         } else {
+          console.log(req.body);
           if (!req.body.newNickName) {
             res.status(201).json({
               success: false,
