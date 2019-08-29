@@ -56,21 +56,40 @@ module.exports = {
             error: err
           });
         } else {
-          db.users
-            .update(
-              { is_current_member: 0 },
-              {
-                where: {
-                  _id: user._id
-                }
+          bcrypt
+            .compare(req.body.password, user.password)
+            .then(response => {
+              if (response !== true) {
+                res.status(200).json({
+                  success: false,
+                  message: "비밀번호가 올바르지 않습니다.",
+                  error: null
+                });
+              } else {
+                db.users
+                  .update(
+                    { is_current_member: 0 },
+                    {
+                      where: {
+                        _id: user._id
+                      }
+                    }
+                  )
+                  .then(() => {
+                    res.status(201).send({
+                      success: true,
+                      message: "성공적으로 탈퇴되었습니다.",
+                      error: err
+                    });
+                  })
+                  .catch(err => {
+                    res.status(201).send({
+                      success: false,
+                      message: "ERROR",
+                      error: err
+                    });
+                  });
               }
-            )
-            .then(() => {
-              res.status(201).send({
-                success: true,
-                message: "성공적으로 탈퇴되었습니다.",
-                error: err
-              });
             })
             .catch(err => {
               res.status(201).send({
