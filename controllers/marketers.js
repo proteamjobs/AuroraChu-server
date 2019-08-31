@@ -41,8 +41,7 @@ let fakeMarketesLatest = {
       post_id: 2,
       user_name: "JM",
       title: "간호 / 보건 / 복지 / 사회적 마케팅 전문 입니다.",
-      image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+      image_url: "https://i-msdn.sec.s-msft.com/dynimg/IC866065.png",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -52,7 +51,7 @@ let fakeMarketesLatest = {
       user_name: "Kids01",
       title: "IT 홈페이지 제작 전문 업체입니다. 마케팅 도와드립니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzBBhilTl7Qmc1V0F30WHWKsJSYRz-MLs7t099UbCzRO86rXbhgQ",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -62,7 +61,7 @@ let fakeMarketesLatest = {
       user_name: "underscore",
       title: "금융관련 전공자 입니다. ",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "http://blog.edx.org/wp-content/uploads/2017/01/android-featured.jpg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -72,7 +71,7 @@ let fakeMarketesLatest = {
       user_name: "untitled",
       title: "다자인 / 판넬 / 업체 홍보 전문가입니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://cdn2.hubspot.net/hubfs/820873/Imported_Blog_Media/how-to-evaluate-and-hire-an-android-developer-2.jpg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -83,7 +82,7 @@ let fakeMarketesLatest = {
       title:
         "다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://www.bullseyetechgroup.com/wp-content/uploads/2018/06/Cost-of-web-development-in-Canada-e1526618777824.jpg",
       avg_star: 3.5,
       number_of_sales: 1
     },
@@ -94,7 +93,7 @@ let fakeMarketesLatest = {
       title:
         "홍보 마케팅 전문 입니다. 반갑습니다. 테스트 재규어 중사 입니다. 저렴합니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTim_e7vlTspKdojxKrmJHsVopc984L4hcaGq-w8L7HMUnsC429",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -104,7 +103,7 @@ let fakeMarketesLatest = {
       user_name: "JM",
       title: "간호 / 보건 / 복지 / 사회적 마케팅 전문 입니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://techcrunchjp.files.wordpress.com/2018/03/gettyimages-697538579.jpg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -114,7 +113,7 @@ let fakeMarketesLatest = {
       user_name: "Kids01",
       title: "IT 홈페이지 제작 전문 업체입니다. 마케팅 도와드립니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://makeawebsitehub.com/wp-content/uploads/2017/04/wordpress-923188_640.jpg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -124,7 +123,7 @@ let fakeMarketesLatest = {
       user_name: "underscore",
       title: "금융관련 전공자 입니다. ",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://miro.medium.com/max/916/1*YVkK570-GSHyqtiEiIi6Xw.jpeg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -134,7 +133,7 @@ let fakeMarketesLatest = {
       user_name: "untitled",
       title: "다자인 / 판넬 / 업체 홍보 전문가입니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "http://pan-creators.com/wp-content/uploads/2018/02/%EC%82%AC%EC%A7%84-1.jpg",
       avg_star: 0,
       number_of_sales: 0
     },
@@ -145,7 +144,7 @@ let fakeMarketesLatest = {
       title:
         "다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.다자인 / 판넬 / 업체 홍보 전문가입니다.",
       image_url:
-        "https://d2v80xjmx68n4w.cloudfront.net/gigs/tqQcB1558974577.jpg",
+        "https://cdn.pixabay.com/photo/2015/03/01/11/17/arrangement-654573_960_720.jpg",
       avg_star: 3.5,
       number_of_sales: 1
     }
