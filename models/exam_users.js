@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 // const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
-  const marketer_posts = sequelize.define(
-    "marketer_posts",
+  const exam_users = sequelize.define(
+    "exam_users",
     {
       _id: {
         type: DataTypes.INTEGER,
@@ -11,24 +11,16 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      imaga_url: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      avg_duration: {
+      status: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      category: {
-        type: DataTypes.STRING,
+      test_score: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      test_result: {
+        type: DataTypes.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -47,17 +39,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  marketer_posts.associate = function(models) {
-    marketer_posts.belongsTo(models.users, {
+  exam_users.associate = function(models) {
+    exam_users.belongsTo(models.users, {
       foreignKey: { name: "fk_user_id", allowNull: false },
       targetKey: "_id"
     });
-    marketer_posts.hasMany(models.reviews, {
-      foreignKey: { name: "fk_post_id", allowNull: false }
-    });
+    // marketer_posts.hasMany(models.reviews, {
+    //   foreignKey: { name: "fk_post_id", allowNull: false }
+    // });
   };
 
-  return marketer_posts;
+  return exam_users;
 };
 
 // users.hasMany(models.orders, {
