@@ -37,7 +37,7 @@ module.exports = {
       }
     })(req, res, next);
 
-    // res.status(200).send("POST /users/:user_id");
+    // res.status(200).send("POST /users/:fk_user_id");
   },
   withdrawal: {
     put: (req, res, next) => {

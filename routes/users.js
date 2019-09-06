@@ -30,8 +30,8 @@ let upload = multer({
 router.get("/", controllers.users.get);
 router.put("/withdrawal", controllers.users.withdrawal.put);
 router.get("/verify", controllers.users.verify.get);
-router.get("/:user_id", function(req, res, next) {
-  res.send(`users/${req.params.user_id} Users Request.`);
+router.get("/:fk_user_id", function(req, res, next) {
+  res.send(`users/${req.params.fk_user_id} Users Request.`);
 });
 router.get("/test", controllers.users.test.get);
 router.put("/password", controllers.users.password.put);
@@ -43,7 +43,7 @@ router.put(
 );
 router.put("/profile_img/default", controllers.users.profile_img.default.put);
 
-// router.post("/:user_id", controllers.users.post);
+// router.post("/:fk_user_id", controllers.users.post);
 router.post("/", controllers.users.post);
 
 module.exports = router;

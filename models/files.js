@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
 
   files.associate = function(models) {
     files.belongsTo(models.marketer_applies, {
-      foreignKey: { name: "apply_id", allowNull: false },
+      foreignKey: { name: "fk_apply_id", allowNull: false },
       targetKey: "_id",
       onDelete: "cascade"
     });

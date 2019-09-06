@@ -33,12 +33,12 @@ module.exports = (sequelize, DataTypes) => {
 
   marketer_applies.associate = function(models) {
     marketer_applies.belongsTo(models.users, {
-      foreignKey: { name: "user_id", allowNull: false },
+      foreignKey: { name: "fk_user_id", allowNull: false },
       targetKey: "_id"
     });
 
     marketer_applies.hasMany(models.files, {
-      foreignKey: { name: "apply_id", allowNull: false },
+      foreignKey: { name: "fk_apply_id", allowNull: false },
       sourceKey: "_id",
       onDelete: "cascade"
     });
