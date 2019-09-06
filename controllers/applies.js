@@ -25,7 +25,7 @@ module.exports = {
         db.marketer_applies
           .findAndCountAll({
             where: {
-              user_id: user._id
+              fk_user_id: user._id
             }
           })
           .then(data => {
@@ -59,12 +59,12 @@ module.exports = {
         });
       } else {
         db.marketer_applies
-          .create({ status: 0, user_id: user._id })
+          .create({ status: 0, fk_user_id: user._id })
           .then(data => {
             req.files.forEach(async item => {
               await db.files
                 .create({
-                  apply_id: data._id,
+                  fk_apply_id: data._id,
                   file_url: item.location,
                   file_name: item.originalname,
                   file_size: item.size,
@@ -115,13 +115,13 @@ module.exports = {
         db.marketer_applies
           .findOne({
             where: {
-              user_id: user._id
+              fk_user_id: user._id
             },
             include: { model: db.files }
           })
           .then(item => {
             db.marketer_applies
-              .destroy({ where: { user_id: user._id } })
+              .destroy({ where: { fk_user_id: user._id } })
               .then(data => {
                 if (!data) {
                   res.status(201).json({
@@ -178,7 +178,7 @@ module.exports = {
           db.marketer_applies
             .findOne({
               where: {
-                user_id: user._id
+                fk_user_id: user._id
               }
             })
             .then(data => {

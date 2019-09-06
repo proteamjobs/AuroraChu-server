@@ -78,10 +78,10 @@ module.exports = (sequelize, DataTypes) => {
   users.associate = function(models) {
     users.belongsToMany(models.videos, {
       through: "videos_processes",
-      foreignKey: "user_id"
+      foreignKey: "fk_user_id"
     });
     users.hasMany(models.marketer_applies, {
-      foreignKey: { name: "user_id", allowNull: false }
+      foreignKey: { name: "fk_user_id", allowNull: false }
     });
   };
 
