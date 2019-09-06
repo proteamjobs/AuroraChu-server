@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 // const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
-  const marketer_posts = sequelize.define(
-    "marketer_posts",
+  const reviews = sequelize.define(
+    "reviews",
     {
       _id: {
         type: DataTypes.INTEGER,
@@ -11,24 +11,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
       content: {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      imaga_url: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      avg_duration: {
+      star: {
         type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      category: {
-        type: DataTypes.STRING,
         allowNull: false
       },
       createdAt: {
@@ -47,24 +35,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  marketer_posts.associate = function(models) {
-    marketer_posts.belongsTo(models.users, {
+  reviews.associate = function(models) {
+    reviews.belongsTo(models.users, {
       foreignKey: { name: "fk_user_id", allowNull: false },
       targetKey: "_id"
     });
-    marketer_posts.hasMany(models.reviews, {
-      foreignKey: { name: "fk_post_id", allowNull: false }
+    reviews.belongsTo(models.marketer_posts, {
+      foreignKey: { name: "fk_post_id", allowNull: false },
+      targetKey: "_id"
     });
-    // users.belongsToMany(models.videos, {
-    //   through: "videos_processes",
-    //   foreignKey: "fk_user_id"
-    // });
-    // users.hasMany(models.marketer_applies, {
-    //   foreignKey: { name: "fk_user_id", allowNull: false }
-    // });
   };
 
-  return marketer_posts;
+  return reviews;
 };
 
 // users.hasMany(models.orders, {
