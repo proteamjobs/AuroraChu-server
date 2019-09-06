@@ -65,7 +65,6 @@ passport.use(
                         email: email,
                         password: hashedPassword,
                         nickname: getNickname,
-                        provider: "wakeup",
                         is_marketing_agree: req.body.marketingReceiveAgree
                       })
                       .then(user => {
