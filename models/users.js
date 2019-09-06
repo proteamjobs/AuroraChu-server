@@ -79,6 +79,9 @@ module.exports = (sequelize, DataTypes) => {
     users.hasMany(models.marketer_applies, {
       foreignKey: { name: "fk_user_id", allowNull: false }
     });
+    users.hasMany(models.marketer_posts, {
+      foreignKey: { name: "fk_user_id", allowNull: false }
+    });
   };
 
   return users;
