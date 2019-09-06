@@ -42,10 +42,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true
       },
-      test_score: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
       is_current_member: {
         type: DataTypes.BOOLEAN,
         defaultValue: 1,
@@ -80,6 +76,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: { name: "fk_user_id", allowNull: false }
     });
     users.hasMany(models.marketer_posts, {
+      foreignKey: { name: "fk_user_id", allowNull: false }
+    });
+    users.hasMany(models.reviews, {
       foreignKey: { name: "fk_user_id", allowNull: false }
     });
   };
