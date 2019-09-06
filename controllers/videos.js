@@ -25,11 +25,11 @@ module.exports = {
           db.videos.findAll().then(async video => {
             let videosMap = video.map(async data => {
               let checkComplete = await db.videos_processes.findAndCountAll({
-                where: { fk_user_id: user._id, video_id: data._id }
+                where: { fk_user_id: user._id, fk_video_id: data._id }
               });
               if (checkComplete.count) {
                 return {
-                  video_id: data._id,
+                  fk_video_id: data._id,
                   title: data.title,
                   src: data.src,
                   description: data.description,
@@ -38,7 +38,7 @@ module.exports = {
                 };
               } else {
                 return {
-                  video_id: data._id,
+                  fk_video_id: data._id,
                   title: data.title,
                   src: data.src,
                   description: data.description,
@@ -111,7 +111,10 @@ module.exports = {
             } else {
               db.videos_processes
                 .findAndCountAll({
-                  where: { fk_user_id: user._id, video_id: req.params.video_id }
+                  where: {
+                    fk_user_id: user._id,
+                    fk_video_id: req.params.video_id
+                  }
                 })
                 .then(data => {
                   if (data.count) {
@@ -124,7 +127,7 @@ module.exports = {
                     db.videos_processes
                       .create({
                         fk_user_id: user._id,
-                        video_id: req.params.video_id
+                        fk_video_id: req.params.video_id
                       })
                       .then(() => {
                         res.status(201).send({

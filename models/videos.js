@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
   videos.associate = function(models) {
     videos.belongsToMany(models.users, {
       through: "videos_processes",
-      foreignKey: "video_id"
+      foreignKey: "fk_video_id"
     });
   };
 
