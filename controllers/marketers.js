@@ -1,3 +1,6 @@
+const passport = require("passport");
+const db = require("../models");
+
 module.exports = {
   get: (req, res) => {
     console.log(req.params);
@@ -8,6 +11,62 @@ module.exports = {
     } else {
       res.send("ERROR :: /marketers :: Query String or Path URL.");
     }
+  },
+  post: (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info) => {
+      if (err) {
+        res.status(200).send("ERROR !! POST /marketer : ", {
+          success: false,
+          message: null,
+          error: err
+        });
+      }
+      if (info !== undefined) {
+        res.status(201).send({
+          success: false,
+          message: info.message,
+          error: err
+        });
+      } else {
+        db.marketer_posts
+          .findAndCountAll({
+            where: { fk_user_id: user._id }
+          })
+          .then(post => {
+            if (post.count > 0) {
+              res.status(201).send({
+                success: false,
+                message: "이미 등록되어 있는 마케터 입니다.",
+                error: null
+              });
+            } else {
+              db.marketer_posts
+                .create({
+                  fk_user_id: user._id,
+                  title: req.body.title,
+                  content: req.body.content,
+                  image_url: req.body.image_url,
+                  avg_duration: req.body.avg_duration,
+                  category: req.body.category
+                })
+                .then(() => {
+                  res.status(201).json({
+                    success: true,
+                    message: "마케터가 성공적으로 등록되었습니다.",
+                    error: err
+                  });
+                })
+                .catch(err => {
+                  res.status(201).json({
+                    success: false,
+                    message: "",
+                    error: err
+                  });
+                });
+            }
+          });
+      }
+    })(req, res, next);
   },
   latest: {
     get: (req, res) => {

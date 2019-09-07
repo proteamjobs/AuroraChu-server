@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false
       },
-      imaga_url: {
+      image_url: {
         type: DataTypes.STRING,
         allowNull: false
       },
