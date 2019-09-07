@@ -3,6 +3,7 @@ const router = express.Router();
 const controllers = require("../controllers");
 
 router.get("/", controllers.marketers.get);
+router.post("/", controllers.marketers.post);
 // router.get("/:post_id")
 
 router.get("/latest", controllers.marketers.latest.get);
