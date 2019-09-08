@@ -3,8 +3,9 @@ const db = require("../models");
 
 module.exports = {
   get: (req, res) => {
-    console.log(req.params);
     if (!Object.keys(req.query).length) {
+      console.log(req.params.nickname);
+
       res.send("/marketers");
     } else if (req.query.category) {
       res.send("/marketers?category=" + req.query.category);
@@ -72,6 +73,53 @@ module.exports = {
     get: (req, res) => {
       res.status(200).json(fakeMarketesLatest);
       //   res.send("/marketers/test");
+    }
+  },
+  nickname: {
+    get: (req, res) => {
+      console.log(req.params.nickname);
+      res.status(200).json({
+        success: true,
+        message: "",
+        error: null,
+        marketer_info: {
+          user_id: 34,
+          profile_url:
+            "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/1567767464138.png",
+          avg_star: 3.5,
+          nickname: "중사캐로로",
+          number_of_sales: 2
+        },
+        post: {
+          post_id: 12,
+          title: "홍보 마케팅 전문가입니다. 맞겨만 주세요!",
+          content: "반갑습니다. 반갑습니다! 우아! \n반가워요!",
+          image_url:
+            "http://www.ddaily.co.kr/data/photos/20140520/art_1400387227.jpg",
+          avg_duration: 2,
+          category: "마케팅/홍보",
+          created_at: "2019-08-25 02:12:41"
+        },
+        reviews: [
+          {
+            profile_url:
+              "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
+            nickname: "캐로로중사",
+            content: "훌륭합니다!",
+            star: 4,
+            created_at: "2019-08-30 12:32:31"
+          },
+          {
+            profile_url:
+              "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
+            nickname: "재규어",
+            content: "조금 아쉬워요!",
+            star: 3,
+            created_at: "2019-09-01 13:54:30"
+          }
+        ]
+      });
+      // res.status(200).send("/marketers/:nickname");
     }
   },
   test: {
@@ -209,3 +257,35 @@ let fakeMarketesLatest = {
     }
   ]
 };
+
+// let temp =
+// {
+//   success: Boolean,
+//   message: String,
+//   error: String,
+//   marketer_info: {
+//     user_id: Number,
+//     profile_url: String,
+//     avg_star: Number,
+//     nickname: String,
+//     number_of_sales: Number
+//   },
+//   post: {
+//     post_id: Number,
+//     title: String,
+//     content: String,
+//     image_url: String,
+//     avg_duration: Number,
+//     category: String,
+//     created_at: String
+//   },
+//   reviews: [
+//     {
+//       profile_url: String,
+//       nickname: String,
+//       content: String,
+//       star: Number,
+//       created_at: String
+//     }
+//   ]
+// };
