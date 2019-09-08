@@ -8,8 +8,6 @@ router.post("/", controllers.marketers.post);
 
 router.get("/latest", controllers.marketers.latest.get);
 router.get("/test", controllers.marketers.test.get);
-router.get("/:post_id", (req, res) => {
-  res.send("/marketers/:post_id");
-});
+router.get("/:nickname", controllers.marketers.nickname.get);
 
 module.exports = router;
