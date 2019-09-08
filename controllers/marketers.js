@@ -75,48 +75,72 @@ module.exports = {
   },
   nickname: {
     get: (req, res) => {
-      res.status(200).json({
-        success: true,
-        message: "",
-        error: null,
-        marketer_info: {
-          user_id: 34,
-          profile_url:
-            "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/1567767464138.png",
-          avg_star: 3.5,
-          nickname: "중사캐로로",
-          number_of_sales: 2
-        },
-        post: {
-          post_id: 12,
-          title: "홍보 마케팅 전문가입니다. 맞겨만 주세요!",
-          content: "반갑습니다. 반갑습니다! 우아! \n반가워요!",
-          image_url:
-            "http://www.ddaily.co.kr/data/photos/20140520/art_1400387227.jpg",
-          avg_duration: 2,
-          category: "마케팅/홍보",
-          created_at: "2019-08-25 02:12:41"
-        },
-        reviews: [
-          {
-            profile_url:
-              "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
-            nickname: "캐로로중사",
-            content: "훌륭합니다!",
-            star: 4,
-            created_at: "2019-08-30 12:32:31"
-          },
-          {
-            profile_url:
-              "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
-            nickname: "재규어",
-            content: "조금 아쉬워요!",
-            star: 3,
-            created_at: "2019-09-01 13:54:30"
+      db.users
+        .findOne({
+          where: { nickname: req.params.nickname },
+          include: {
+            model: db.marketer_posts,
+            include: { model: db.reviews, include: { model: db.users } }
           }
-        ]
-      });
-      // res.status(200).send("/marketers/:nickname");
+        })
+        .then(result => {
+          if (result === null) {
+            res.status(200).json({
+              success: false,
+              message: "존재하지 않는 마케터 입니다.",
+              error: null
+            });
+          } else {
+            let avgStar = 0;
+            if (result.marketer_posts[0].reviews.length) {
+              let sumStar = 0;
+              result.marketer_posts[0].reviews.forEach(review => {
+                sumStar += review.star;
+              });
+              avgStar =
+                Math.round(
+                  (sumStar / result.marketer_posts[0].reviews.length) * 2
+                ) / 2;
+            }
+            res.status(200).json({
+              success: true,
+              message: "",
+              error: null,
+              marketer_info: {
+                user_id: result._id,
+                profile_url: result.profile_url,
+                avg_star: avgStar,
+                nickname: result.nickname,
+                number_of_sales: 0
+              },
+              post: {
+                post_id: result.marketer_posts[0]._id,
+                title: result.marketer_posts[0].title,
+                content: result.marketer_posts[0].content,
+                image_url: result.marketer_posts[0].image_url,
+                avg_duration: result.marketer_posts[0].avg_duration,
+                category: result.marketer_posts[0].category,
+                created_at: result.marketer_posts[0].createdAt
+              },
+              reviews: result.marketer_posts[0].reviews.map(data => {
+                return {
+                  profile_url: data.user.profile_url,
+                  nickname: data.user.nickname,
+                  content: data.content,
+                  star: data.star,
+                  created_at: data.createdAt
+                };
+              })
+            });
+          }
+        })
+        .catch(err => {
+          res.status(200).json({
+            success: false,
+            message: "",
+            error: err
+          });
+        });
     }
   },
   test: {
