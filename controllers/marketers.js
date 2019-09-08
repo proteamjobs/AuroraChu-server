@@ -4,8 +4,6 @@ const db = require("../models");
 module.exports = {
   get: (req, res) => {
     if (!Object.keys(req.query).length) {
-      console.log(req.params.nickname);
-
       res.send("/marketers");
     } else if (req.query.category) {
       res.send("/marketers?category=" + req.query.category);
@@ -77,7 +75,6 @@ module.exports = {
   },
   nickname: {
     get: (req, res) => {
-      console.log(req.params.nickname);
       res.status(200).json({
         success: true,
         message: "",
