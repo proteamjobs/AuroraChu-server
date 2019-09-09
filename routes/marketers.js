@@ -7,10 +7,10 @@ router.post("/", controllers.marketers.post);
 // router.get("/:post_id")
 router.get("/latest", controllers.marketers.latest.get);
 
-router.get("/@:nickname", controllers.marketers.nickname.get);
-router.get("/:category", (req, res) => {
-  res.send("GET /#:category");
+router.get("/category/:category", (req, res) => {
+  res.send("GET /category/:category");
 });
+router.get("/@:nickname", controllers.marketers.nickname.get);
 router.get("/test", controllers.marketers.test.get);
 
 module.exports = router;
