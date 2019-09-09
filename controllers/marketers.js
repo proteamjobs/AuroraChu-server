@@ -64,29 +64,6 @@ module.exports = {
         });
       });
 
-    let a = {
-      success: Boolean,
-      message: String,
-      error: String,
-      maxPage: Number,
-      marketers: [
-        {
-          marketer_info: {
-            user_id: Number,
-            nickname: String,
-            number_of_sales: Number,
-            avg_star: Number,
-            review_count: Number
-          },
-          post: {
-            post_id: Number,
-            title: String,
-            image_url: String
-          }
-        }
-      ]
-    };
-
     // if (!Object.keys(req.query).length) {
     //   res.send("/marketers");
     // } else if (req.query.category) {
@@ -224,6 +201,56 @@ module.exports = {
             error: err
           });
         });
+    }
+  },
+  user_id: {
+    get: (req, res) => {
+      if (!isNaN(parseInt(req.params.user_id))) {
+        db.marketer_posts
+          .findOne({
+            where: { fk_user_id: parseInt(req.params.user_id) }
+          })
+          .then(result => {
+            if (!result) {
+              res.status(200).json({
+                success: false,
+                message: "마케터가 존재하지 않습니다.",
+                error: null,
+                is_marketer: false
+              });
+            } else {
+              res.status(200).json({
+                success: true,
+                message: "",
+                error: null,
+                is_marketer: true,
+                post: {
+                  post_id: result._id,
+                  title: result.title,
+                  content: result.content,
+                  image_url: result.image_url,
+                  avg_duration: result.avg_duration,
+                  category: result.category,
+                  created_at: result.createdAt
+                }
+              });
+            }
+          })
+          .catch(err => {
+            res.status(200).json({
+              success: false,
+              message: "",
+              error: err
+            });
+          });
+        // res.send(req.params.user_id);
+      } else {
+        res.status(200).json({
+          success: false,
+          message: "잘못된 요청입니다. 파라미터를 확인하세요.",
+          error: null
+        });
+      }
     }
   },
   test: {
