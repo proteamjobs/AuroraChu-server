@@ -3,13 +3,97 @@ const db = require("../models");
 
 module.exports = {
   get: (req, res) => {
-    if (!Object.keys(req.query).length) {
-      res.send("/marketers");
-    } else if (req.query.category) {
-      res.send("/marketers?category=" + req.query.category);
-    } else {
-      res.send("ERROR :: /marketers :: Query String or Path URL.");
+    let categoryFilter = {};
+    if (req.query.category) {
+      categoryFilter["category"] = req.query.category;
     }
+    let pageNum;
+    req.query.page ? (pageNum = req.query.page) : (pageNum = 1);
+
+    let offset = 0;
+    let limit = 12;
+    if (pageNum > 1) {
+      offset = limit * (pageNum - 1);
+    }
+
+    db.marketer_posts
+      .findAndCountAll({
+        where: categoryFilter,
+        offset: offset,
+        limit: limit,
+        include: [{ model: db.users }, { model: db.reviews }]
+      })
+      .then(result => {
+        res.status(200).json({
+          success: true,
+          message: "",
+          error: null,
+          maxPage: Math.ceil(result.count / limit),
+          marketers: result.rows.map(data => {
+            let avgStar = 0;
+            let review_count = data.reviews.length;
+            if (review_count) {
+              let sumStar = 0;
+              data.reviews.forEach(review => {
+                sumStar += review.star;
+              });
+              avgStar = Math.round((sumStar / review_count) * 2) / 2;
+            }
+            return {
+              marketer_info: {
+                user_id: data.user._id,
+                nickname: data.user.nickname,
+                number_of_sales: 0,
+                avg_star: avgStar,
+                review_count: review_count
+              },
+              post: {
+                post_id: data._id,
+                title: data.title,
+                image_url: data.image_url
+              }
+            };
+          })
+        });
+      })
+      .catch(err => {
+        res.status(200).json({
+          success: false,
+          message: "",
+          error: err
+        });
+      });
+
+    let a = {
+      success: Boolean,
+      message: String,
+      error: String,
+      maxPage: Number,
+      marketers: [
+        {
+          marketer_info: {
+            user_id: Number,
+            nickname: String,
+            number_of_sales: Number,
+            avg_star: Number,
+            review_count: Number
+          },
+          post: {
+            post_id: Number,
+            title: String,
+            image_url: String
+          }
+        }
+      ]
+    };
+
+    // if (!Object.keys(req.query).length) {
+    //   res.send("/marketers");
+    // } else if (req.query.category) {
+    //   res.send("/marketers?category=" + req.query.category);
+    // } else {
+    //   res.send("ERROR :: /marketers :: Query String or Path URL.");
+    // }
   },
   post: (req, res, next) => {
     passport.authenticate("jwt", { session: false }, (err, user, info) => {
@@ -92,15 +176,13 @@ module.exports = {
             });
           } else {
             let avgStar = 0;
-            if (result.marketer_posts[0].reviews.length) {
+            let review_count = result.marketer_posts[0].reviews.length;
+            if (review_count) {
               let sumStar = 0;
               result.marketer_posts[0].reviews.forEach(review => {
                 sumStar += review.star;
               });
-              avgStar =
-                Math.round(
-                  (sumStar / result.marketer_posts[0].reviews.length) * 2
-                ) / 2;
+              avgStar = Math.round((sumStar / review_count) * 2) / 2;
             }
             res.status(200).json({
               success: true,
@@ -110,6 +192,7 @@ module.exports = {
                 user_id: result._id,
                 profile_url: result.profile_url,
                 avg_star: avgStar,
+                review_count: review_count,
                 nickname: result.nickname,
                 number_of_sales: 0
               },
