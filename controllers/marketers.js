@@ -1,5 +1,9 @@
 const passport = require("passport");
 const db = require("../models");
+const AWS = require("aws-sdk");
+AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
+
+let s3 = new AWS.S3();
 
 module.exports = {
   get: (req, res) => {
@@ -127,6 +131,88 @@ module.exports = {
           });
       }
     })(req, res, next);
+  },
+  delete: (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info) => {
+      if (err) {
+        res.status(200).send("ERROR !! POST /marketer : ", {
+          success: false,
+          message: null,
+          error: err
+        });
+      }
+      if (info !== undefined) {
+        res.status(201).send({
+          success: false,
+          message: info.message,
+          error: err
+        });
+      } else {
+        db.marketer_posts
+          .findOne({ where: { fk_user_id: user._id } })
+          .then(result => {
+            if (!result) {
+              res.status(201).send({
+                success: false,
+                message: "마케터가 존재하지 않습니다.",
+                error: null
+              });
+            } else {
+              let oldProfileUrl = result.image_url.split("img")[1].slice(1);
+
+              db.marketer_posts
+                .destroy({ where: { fk_user_id: user._id } })
+                .then(() => {
+                  s3.deleteObject(
+                    {
+                      Bucket: "wake-up-file-server/post_img",
+                      Key: oldProfileUrl
+                    },
+                    function(err, data) {
+                      if (err) {
+                        res.status(201).json({
+                          success: false,
+                          message: "ERRORS3 delete post_img",
+                          error: err
+                        });
+                      } else {
+                        res.status(201).json({
+                          success: true,
+                          message: "성공적으로 마케터를 삭제했습니다.",
+                          error: null
+                        });
+                      }
+                    }
+                  );
+                })
+                .catch(err => {
+                  res.status(201).json({
+                    success: false,
+                    message: "",
+                    error: err
+                  });
+                });
+            }
+          })
+          .catch(err => {
+            res.status(201).json({
+              success: false,
+              message: "",
+              error: err
+            });
+          });
+      }
+    })(req, res, next);
+  },
+  upload: {
+    post: (req, res) => {
+      res.status(201).json({
+        success: true,
+        message: "",
+        error: null,
+        image_url: req.file.location
+      });
+    }
   },
   latest: {
     get: (req, res) => {
