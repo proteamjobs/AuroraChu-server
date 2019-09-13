@@ -1,9 +1,25 @@
 const passport = require("passport");
 const db = require("../models");
+const path = require("path");
+
 const AWS = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
 
 let s3 = new AWS.S3();
+
+let upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "wake-up-file-server/post_img",
+    key: function(req, file, cb) {
+      let extension = path.extname(file.originalname);
+      cb(null, Date.now().toString() + extension);
+    },
+    acl: "public-read-write"
+  })
+});
 
 module.exports = {
   get: (req, res) => {
@@ -204,14 +220,112 @@ module.exports = {
       }
     })(req, res, next);
   },
+  put: (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info) => {
+      if (err) {
+        res.status(201).send("ERROR !! PUT /marketers : ", {
+          success: false,
+          message: null,
+          error: err
+        });
+      }
+      if (info !== undefined) {
+        res.status(201).send({
+          success: false,
+          message: info.message,
+          error: err
+        });
+      } else {
+        db.marketer_posts
+          .update(
+            {
+              title: req.body.title,
+              content: req.body.content,
+              image_url: req.body.image_url,
+              avg_duration: req.body.avg_duration,
+              category: req.body.category
+            },
+            { where: { fk_user_id: user._id } }
+          )
+          .then(() => {
+            res.status(201).send({
+              success: true,
+              message: "성공적으로 수정되었습니다.",
+              error: null
+            });
+          })
+          .catch(err => {
+            res.status(201).send({
+              success: false,
+              message: "",
+              error: err
+            });
+          });
+      }
+    })(req, res, next);
+  },
   upload: {
-    post: (req, res) => {
-      res.status(201).json({
-        success: true,
-        message: "",
-        error: null,
-        image_url: req.file.location
-      });
+    post: (req, res, next) => {
+      passport.authenticate("jwt", { session: false }, (err, user, info) => {
+        if (err) {
+          res.status(200).send("ERROR !! POST /marketers/upload : ", {
+            success: false,
+            message: null,
+            error: err
+          });
+        }
+        if (info !== undefined) {
+          res.status(201).send({
+            success: false,
+            message: info.message,
+            error: err
+          });
+        } else {
+          db.marketer_posts
+            .findOne({
+              where: {
+                fk_user_id: user._id
+              }
+            })
+            .then(async result => {
+              if (result) {
+                let oldProfileUrl = result.image_url.split("img")[1].slice(1);
+
+                await s3.deleteObject(
+                  {
+                    Bucket: "wake-up-file-server/post_img",
+                    Key: oldProfileUrl
+                  },
+                  function(err, data) {
+                    if (err) {
+                      res.status(201).json({
+                        success: false,
+                        message: "ERRORS3 upload post_img",
+                        error: err
+                      });
+                    }
+                  }
+                );
+              }
+              upload.single("imageFile")(req, res, err => {
+                if (err) {
+                  res.status(400).json({
+                    success: false,
+                    message: "unable to create image",
+                    error: err
+                  });
+                } else {
+                  res.status(201).json({
+                    success: true,
+                    message: "",
+                    error: null,
+                    image_url: req.file.location
+                  });
+                }
+              });
+            });
+        }
+      })(req, res, next);
     }
   },
   latest: {
