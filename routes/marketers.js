@@ -10,37 +10,10 @@ AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
 
 let s3 = new AWS.S3();
 
-let upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "wake-up-file-server/post_img",
-    key: function(req, file, cb) {
-      let extension = path.extname(file.originalname);
-      cb(null, Date.now().toString() + extension);
-    },
-    acl: "public-read-write"
-  })
-});
-
 router.get("/", controllers.marketers.get);
 router.post("/", controllers.marketers.post);
-router.post(
-  "/upload",
-  (req, res, next) => {
-    upload.single("imageFile")(req, res, err => {
-      if (err) {
-        res.status(400).json({
-          success: false,
-          message: "unable to create image",
-          error: err
-        });
-      } else {
-        next();
-      }
-    });
-  },
-  controllers.marketers.upload.post
-);
+router.put("/", controllers.marketers.put);
+router.post("/upload", controllers.marketers.upload.post);
 router.delete("/", controllers.marketers.delete);
 // router.get("/:post_id")
 router.get("/latest", controllers.marketers.latest.get);
