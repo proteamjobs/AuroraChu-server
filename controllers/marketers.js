@@ -288,6 +288,7 @@ module.exports = {
               }
             })
             .then(async result => {
+              console.log("RESULT :: ", result);
               if (result) {
                 let oldProfileUrl = result.image_url.split("img")[1].slice(1);
 
@@ -330,7 +331,45 @@ module.exports = {
   },
   latest: {
     get: (req, res) => {
-      res.status(200).json(fakeMarketesLatest);
+      db.marketer_posts
+        .findAll({
+          limit: 12,
+          order: [["createdAt", "DESC"]],
+          include: [{ model: db.users }, { model: db.reviews }]
+        })
+        .then(result => {
+          res.status(200).json({
+            success: true,
+            message: "",
+            error: null,
+            marketers: result.map(item => {
+              let numberOfSales = 0;
+              let avgStar = 0;
+              let review_count = item.reviews.length;
+              if (review_count) {
+                let sumStar = 0;
+                item.reviews.forEach(review => {
+                  sumStar += review.star;
+                });
+                avgStar = Math.round((sumStar / review_count) * 2) / 2;
+              }
+              return {
+                marketer_info: {
+                  user_id: item.user._id,
+                  nickname: item.user.nickname,
+                  number_of_sales: numberOfSales,
+                  avg_star: avgStar,
+                  review_count: review_count
+                },
+                post: {
+                  post_id: item._id,
+                  title: item.title,
+                  image_url: item.image_url
+                }
+              };
+            })
+          });
+        });
       //   res.send("/marketers/test");
     }
   },
