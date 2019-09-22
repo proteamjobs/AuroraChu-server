@@ -49,6 +49,7 @@ module.exports = {
           message: "",
           error: null,
           maxPage: Math.ceil(result.count / limit),
+          totalPage: result.count,
           marketers: result.rows.map(data => {
             let avgStar = 0;
             let review_count = data.reviews.length;
