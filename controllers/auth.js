@@ -73,19 +73,37 @@ module.exports = {
             error: err
           });
         } else {
-          res.status(200).json({
-            success: true,
-            message: null,
-            error: err,
-            user: {
-              _id: user._id,
-              email: user.email,
-              nickname: user.nickname,
-              profile_url: user.profile_url,
-              status: user.status,
-              test_score: user.test_score
-            }
-          });
+          db.marketer_posts
+            .findAll({
+              where: { fk_user_id: user._id },
+              include: [{ model: db.reviews }]
+            })
+            .then(result => {
+              let avgStar = 0;
+              let review_count = result[0].reviews.length;
+              if (review_count) {
+                let sumStar = 0;
+                result[0].reviews.forEach(review => {
+                  sumStar += review.star;
+                });
+                avgStar = Math.round((sumStar / review_count) * 2) / 2;
+              }
+
+              res.status(200).json({
+                success: true,
+                message: null,
+                error: err,
+                user: {
+                  _id: user._id,
+                  email: user.email,
+                  nickname: user.nickname,
+                  profile_url: user.profile_url,
+                  status: user.status,
+                  test_score: user.test_score,
+                  avg_star: avgStar
+                }
+              });
+            });
         }
       })(req, res, next);
     }
