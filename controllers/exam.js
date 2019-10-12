@@ -68,7 +68,23 @@ module.exports = {
           error: err
         });
       } else {
-        res.send(user);
+        db.exam_users
+          .create({
+            fk_user_id: user._id,
+            status: req.body.status,
+            test_score: req.body.testScore,
+            test_result: req.body.testResult
+          })
+          .then(result => {
+            res.send(result);
+          })
+          .catch(err => {
+            res.status(201).send({
+              success: false,
+              message: "POST /exam",
+              error: err
+            });
+          });
       }
     })(req, res, next);
   },
