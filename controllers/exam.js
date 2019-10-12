@@ -75,8 +75,12 @@ module.exports = {
             test_score: req.body.testScore,
             test_result: req.body.testResult
           })
-          .then(result => {
-            res.send(result);
+          .then(() => {
+            res.status(201).json({
+              success: true,
+              message: "성공적으로 입력되었습니다.",
+              error: null
+            });
           })
           .catch(err => {
             res.status(201).send({
