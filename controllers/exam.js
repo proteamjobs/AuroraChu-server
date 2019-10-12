@@ -108,7 +108,30 @@ module.exports = {
           error: err
         });
       } else {
-        res.send(user);
+        if (user.status < 3) {
+          db.users
+            .update({ status: 3 }, { where: { _id: user._id } })
+            .then(() => {
+              res.status(201).json({
+                success: true,
+                message: "성공적으로 변경되었습니다.",
+                error: null
+              });
+            })
+            .catch(err => {
+              res.status(201).json({
+                success: false,
+                message: "PUT /exam",
+                error: err
+              });
+            });
+        } else {
+          res.status(201).json({
+            success: false,
+            message: "유저의 status에 문제가 있습니다. 확인해주세요.",
+            error: err
+          });
+        }
       }
     })(req, res, next);
     // res.send("PUT /exam");
