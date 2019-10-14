@@ -11,24 +11,35 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      status: {
+      unit_price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 9000
+      },
+      purchase_count: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      amount: {
+      total_price: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      price: {
+      use_credit: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       is_confirm: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: false
       },
       requirement: {
         type: DataTypes.TEXT,
+        allowNull: false
+      },
+      status: {
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       createdAt: {
