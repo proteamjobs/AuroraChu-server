@@ -55,6 +55,9 @@ module.exports = (sequelize, DataTypes) => {
     marketer_posts.hasMany(models.reviews, {
       foreignKey: { name: "fk_post_id", allowNull: false }
     });
+    marketer_posts.hasMany(models.businesses, {
+      foreignKey: { name: "fk_post_id", allowNull: false }
+    });
   };
 
   return marketer_posts;
