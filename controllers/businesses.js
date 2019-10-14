@@ -22,17 +22,18 @@ module.exports = {
           });
         } else {
           let purchaseList = await db.businesses.findAll({
-            where: { fk_buyer_id: user._id }
+            where: { fk_buyer_id: user._id },
+            include: { model: db.marketer_posts, include: { model: db.users } }
           });
           // let saleList = await db.businesses.findAll({
           //   where: { fk_post_id: user._id }
           // });
-          // res.json({ purchaseList, saleList });
 
           let { businesses: saleList } = await db.marketer_posts.findOne({
             where: { fk_user_id: user._id },
-            include: { model: db.businesses }
+            include: { model: db.businesses, include: { model: db.users } }
           });
+          // res.json({ purchaseList, saleList });
           res.json({
             success: true,
             message: "성공적으로 검색되었습니다.",
@@ -40,14 +41,12 @@ module.exports = {
             purchaseList: purchaseList.map(data => {
               return {
                 purchaseId: data._id,
-                unitPrice: data.unit_price,
+                marketerTitle: data.marketer_post.title,
+                marketerNickname: data.marketer_post.user.nickname,
                 purchaseCount: data.purchase_count,
                 totalPrice: data.total_price,
                 finalAmount: data.final_amount,
-                useCredit: data.use_credit,
-                trade: data.trade,
-                isConfirm: data.is_Confirm,
-                requirement: data.requirement,
+                isConfirm: data.is_confirm,
                 status: data.status,
                 purchasDate: data.createdAt
               };
@@ -55,13 +54,13 @@ module.exports = {
             saleList: saleList.map(data => {
               return {
                 purchaseId: data._id,
-                unitPrice: data.unit_price,
+                buyerId: data.user._id,
+                buyerEmail: data.user.email,
+                buyerNickname: data.user.nickname,
                 purchaseCount: data.purchase_count,
                 totalPrice: data.total_price,
                 finalAmount: data.final_amount,
-                useCredit: data.use_credit,
-                trade: data.trade,
-                isConfirm: data.is_Confirm,
+                isConfirm: data.is_confirm,
                 requirement: data.requirement,
                 status: data.status,
                 saleDate: data.createdAt
