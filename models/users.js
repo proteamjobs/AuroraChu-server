@@ -34,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
           "https://wake-up-file-server.s3.ap-northeast-2.amazonaws.com/profile_img/defaultProfile.png",
         allowNull: false
       },
+      credit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
       account: {
         type: DataTypes.STRING,
         allowNull: true
@@ -86,6 +91,9 @@ module.exports = (sequelize, DataTypes) => {
     });
     users.hasMany(models.social_accounts, {
       foreignKey: { name: "fk_user_id", allowNull: false }
+    });
+    users.hasMany(models.businesses, {
+      foreignKey: { name: "fk_buyer_id", allowNull: false }
     });
   };
 

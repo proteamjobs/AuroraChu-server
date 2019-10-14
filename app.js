@@ -11,6 +11,7 @@ let marketersRouter = require("./routes/marketers");
 let videosRouter = require("./routes/videos");
 let appliesRouter = require("./routes/applies");
 let examRouter = require("./routes/exam");
+let businessesRouter = require("./routes/businesses");
 
 let db = require("./models/index.js");
 db.sequelize
@@ -42,5 +43,6 @@ app.use("/marketers", marketersRouter);
 app.use("/videos", videosRouter);
 app.use("/applies", appliesRouter);
 app.use("/exam", examRouter);
+app.use("/businesses", businessesRouter);
 
 module.exports = app;
