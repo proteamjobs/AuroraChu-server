@@ -3,24 +3,74 @@ const db = require("../models");
 
 module.exports = {
   get: (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (err, user, info) => {
-      if (err) {
-        res.status(200).json("ERROR !! /businesses ", {
-          success: false,
-          message: null,
-          error: err
-        });
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (err, user, info) => {
+        if (err) {
+          res.status(200).json("ERROR !! /businesses ", {
+            success: false,
+            message: null,
+            error: err
+          });
+        }
+        if (info !== undefined) {
+          res.status(200).json({
+            success: false,
+            message: info.message,
+            error: err
+          });
+        } else {
+          let purchaseList = await db.businesses.findAll({
+            where: { fk_buyer_id: user._id }
+          });
+          // let saleList = await db.businesses.findAll({
+          //   where: { fk_post_id: user._id }
+          // });
+          // res.json({ purchaseList, saleList });
+
+          let { businesses: saleList } = await db.marketer_posts.findOne({
+            where: { fk_user_id: user._id },
+            include: { model: db.businesses }
+          });
+          res.json({
+            success: true,
+            message: "성공적으로 검색되었습니다.",
+            error: null,
+            purchaseList: purchaseList.map(data => {
+              return {
+                purchaseId: data._id,
+                unitPrice: data.unit_price,
+                purchaseCount: data.purchase_count,
+                totalPrice: data.total_price,
+                finalAmount: data.final_amount,
+                useCredit: data.use_credit,
+                trade: data.trade,
+                isConfirm: data.is_Confirm,
+                requirement: data.requirement,
+                status: data.status,
+                purchasDate: data.createdAt
+              };
+            }),
+            saleList: saleList.map(data => {
+              return {
+                purchaseId: data._id,
+                unitPrice: data.unit_price,
+                purchaseCount: data.purchase_count,
+                totalPrice: data.total_price,
+                finalAmount: data.final_amount,
+                useCredit: data.use_credit,
+                trade: data.trade,
+                isConfirm: data.is_Confirm,
+                requirement: data.requirement,
+                status: data.status,
+                saleDate: data.createdAt
+              };
+            })
+          });
+        }
       }
-      if (info !== undefined) {
-        res.status(200).json({
-          success: false,
-          message: info.message,
-          error: err
-        });
-      } else {
-        res.send(user);
-      }
-    })(req, res, next);
+    )(req, res, next);
   },
   post: (req, res, next) => {
     const { postId, purchaseCount, useCredit, trade, requirement } = req.body;
