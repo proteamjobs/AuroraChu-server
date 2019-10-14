@@ -51,7 +51,8 @@ module.exports = {
             use_credit: useCredit,
             total_price: totalPrice,
             final_amount: finalAmount,
-            requirement: requirement
+            requirement: requirement,
+            trade: trade
           })
           .then(() => {
             res.status(201).json({

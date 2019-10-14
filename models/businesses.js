@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      trade: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       is_confirm: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
