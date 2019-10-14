@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       unit_price: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 9000
+        allowNull: false
       },
       purchase_count: {
         type: DataTypes.INTEGER,
@@ -24,10 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      final_amount: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       use_credit: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       is_confirm: {
         type: DataTypes.BOOLEAN,
@@ -36,11 +38,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       requirement: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       status: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       createdAt: {
         type: "TIMESTAMP",
