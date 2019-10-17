@@ -80,7 +80,7 @@ module.exports = {
             })
             .then(result => {
               let avgStar = 0;
-              let review_count = result[0].reviews.length;
+              let review_count = result.length ? result[0].reviews.length : 0;
               if (review_count) {
                 let sumStar = 0;
                 result[0].reviews.forEach(review => {
