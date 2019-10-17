@@ -7,7 +7,7 @@ module.exports = {
       script: "./bin/www",
       // 개발환경시 적용될 설정 지정
       env: {
-        PORT: 3001,
+        PORT: 3002,
         NODE_ENV: "development"
       },
       // 배포환경시 적용될 설정 지정
