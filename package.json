@@ -6,7 +6,8 @@
     "start": "nodemon ./bin/www",
     "start:pm2": "pm2-dev start ecosystem.config.js",
     "deploy:production": "yarn install && pm2 start ecosystem.config.js --env production",
-    "deploy:dev": "yarn install && pm2 start ecosystem.config.js --env development"
+    "deploy:dev": "yarn install && pm2 start ecosystem.config.js --env development",
+    "deploy:all": "pm2 kill && git pull origin master && yarn deploy:production && deploy:dev && pm2 monit"
   },
   "dependencies": {
     "aws-sdk": "^2.517.0",
