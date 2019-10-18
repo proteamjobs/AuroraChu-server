@@ -8,11 +8,13 @@ const multerS3 = require("multer-s3");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
 
 let s3 = new AWS.S3();
+const getEnvUrl = require("../modules/getEnvUrl");
+const bucketS3 = getEnvUrl();
 
 let upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "wake-up-file-server/post_img",
+    bucket: `${bucketS3}/post_img`,
     key: function(req, file, cb) {
       let extension = path.extname(file.originalname);
       cb(null, Date.now().toString() + extension);
@@ -182,7 +184,7 @@ module.exports = {
                 .then(() => {
                   s3.deleteObject(
                     {
-                      Bucket: "wake-up-file-server/post_img",
+                      Bucket: `${bucketS3}/post_img`,
                       Key: oldProfileUrl
                     },
                     function(err, data) {
@@ -295,7 +297,7 @@ module.exports = {
 
                 await s3.deleteObject(
                   {
-                    Bucket: "wake-up-file-server/post_img",
+                    Bucket: `${bucketS3}/post_img`,
                     Key: oldProfileUrl
                   },
                   function(err, data) {

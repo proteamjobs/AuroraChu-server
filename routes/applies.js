@@ -7,10 +7,13 @@ const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
 let s3 = new AWS.S3();
+const getEnvUrl = require("../modules/getEnvUrl");
+const bucketS3 = getEnvUrl();
+
 let upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "wake-up-file-server/apply_file",
+    bucket: `${bucketS3}/apply_file`,
     key: function(req, file, cb) {
       let extension = path.extname(file.originalname);
       cb(null, Date.now().toString() + extension);

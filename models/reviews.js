@@ -38,11 +38,13 @@ module.exports = (sequelize, DataTypes) => {
   reviews.associate = function(models) {
     reviews.belongsTo(models.users, {
       foreignKey: { name: "fk_user_id", allowNull: false },
-      targetKey: "_id"
+      targetKey: "_id",
+      onDelete: "cascade"
     });
     reviews.belongsTo(models.marketer_posts, {
       foreignKey: { name: "fk_post_id", allowNull: false },
-      targetKey: "_id"
+      targetKey: "_id",
+      onDelete: "cascade"
     });
   };
 
