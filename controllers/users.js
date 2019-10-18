@@ -12,6 +12,9 @@ AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
 
 let s3 = new AWS.S3();
 
+const getEnvUrl = require("../modules/getEnvUrl");
+const bucketS3 = getEnvUrl();
+
 module.exports = {
   get: (req, res) => {
     res.send("GET /users");
@@ -312,7 +315,7 @@ module.exports = {
                   if (oldProfileUrl !== "defaultProfile.png") {
                     s3.deleteObject(
                       {
-                        Bucket: "wake-up-file-server/profile_img",
+                        Bucket: `${bucketS3}/profile_img`,
                         Key: oldProfileUrl
                       },
                       function(err, data) {
@@ -395,7 +398,7 @@ module.exports = {
                     .then(() => {
                       s3.deleteObject(
                         {
-                          Bucket: "wake-up-file-server/profile_img",
+                          Bucket: `${bucketS3}/profile_img`,
                           Key: oldProfileUrl
                         },
                         function(err, data) {

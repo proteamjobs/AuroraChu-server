@@ -50,13 +50,16 @@ module.exports = (sequelize, DataTypes) => {
   marketer_posts.associate = function(models) {
     marketer_posts.belongsTo(models.users, {
       foreignKey: { name: "fk_user_id", allowNull: false },
-      targetKey: "_id"
+      targetKey: "_id",
+      onDelete: "cascade"
     });
     marketer_posts.hasMany(models.reviews, {
-      foreignKey: { name: "fk_post_id", allowNull: false }
+      foreignKey: { name: "fk_post_id", allowNull: false },
+      onDelete: "cascade"
     });
     marketer_posts.hasMany(models.businesses, {
-      foreignKey: { name: "fk_post_id", allowNull: false }
+      foreignKey: { name: "fk_post_id", allowNull: false },
+      onDelete: "cascade"
     });
   };
 

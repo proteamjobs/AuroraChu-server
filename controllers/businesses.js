@@ -29,11 +29,22 @@ module.exports = {
           //   where: { fk_post_id: user._id }
           // });
 
-          let { businesses: saleList } = await db.marketer_posts.findOne({
+          // let { businesses: saleList } = await db.marketer_posts.findOne({
+          //   where: { fk_user_id: user._id },
+          //   include: { model: db.businesses, include: { model: db.users } }
+          // });
+          // console.log("saleList :: ", saleList);
+
+          let getList = await db.marketer_posts.findOne({
             where: { fk_user_id: user._id },
             include: { model: db.businesses, include: { model: db.users } }
           });
-          // res.json({ purchaseList, saleList });
+
+          let saleList = [];
+          if (getList !== null) {
+            saleList = getList.businesses;
+          }
+
           res.json({
             success: true,
             message: "성공적으로 검색되었습니다.",

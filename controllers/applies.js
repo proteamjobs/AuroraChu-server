@@ -2,7 +2,8 @@ const passport = require("passport");
 const db = require("../models");
 const AWS = require("aws-sdk");
 AWS.config.loadFromPath(__dirname + "/../config/awsconfig.json");
-
+const getEnvUrl = require("../modules/getEnvUrl");
+const bucketS3 = getEnvUrl();
 let s3 = new AWS.S3();
 
 module.exports = {
@@ -133,7 +134,7 @@ module.exports = {
                   item.files.forEach(result => {
                     s3.deleteObject(
                       {
-                        Bucket: "wake-up-file-server/apply_file",
+                        Bucket: `${bucketS3}/apply_file`,
                         Key: result.file_key
                       },
                       function(err, data) {
