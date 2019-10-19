@@ -168,7 +168,10 @@ module.exports = {
         });
       } else {
         db.marketer_posts
-          .findOne({ where: { fk_user_id: user._id } })
+          .findOne({
+            where: { fk_user_id: user._id },
+            include: { model: db.businesses }
+          })
           .then(result => {
             if (!result) {
               res.status(201).send({
@@ -179,38 +182,46 @@ module.exports = {
             } else {
               let oldProfileUrl = result.image_url.split("img")[1].slice(1);
 
-              db.marketer_posts
-                .destroy({ where: { fk_user_id: user._id } })
-                .then(() => {
-                  s3.deleteObject(
-                    {
-                      Bucket: `${bucketS3}/post_img`,
-                      Key: oldProfileUrl
-                    },
-                    function(err, data) {
-                      if (err) {
-                        res.status(201).json({
-                          success: false,
-                          message: "ERRORS3 delete post_img",
-                          error: err
-                        });
-                      } else {
-                        res.status(201).json({
-                          success: true,
-                          message: "성공적으로 마케터를 삭제했습니다.",
-                          error: null
-                        });
+              if (!result.businesses.length) {
+                db.marketer_posts
+                  .destroy({ where: { fk_user_id: user._id } })
+                  .then(() => {
+                    s3.deleteObject(
+                      {
+                        Bucket: `${bucketS3}/post_img`,
+                        Key: oldProfileUrl
+                      },
+                      function(err, data) {
+                        if (err) {
+                          res.status(201).json({
+                            success: false,
+                            message: "ERRORS3 delete post_img",
+                            error: err
+                          });
+                        } else {
+                          res.status(201).json({
+                            success: true,
+                            message: "성공적으로 마케터를 삭제했습니다.",
+                            error: null
+                          });
+                        }
                       }
-                    }
-                  );
-                })
-                .catch(err => {
-                  res.status(201).json({
-                    success: false,
-                    message: "",
-                    error: err
+                    );
+                  })
+                  .catch(err => {
+                    res.status(201).json({
+                      success: false,
+                      message: "",
+                      error: err
+                    });
                   });
+              } else {
+                res.status(201).json({
+                  success: false,
+                  message: "거래중인 항목은 삭제할 수 없습니다.",
+                  error: 1
                 });
+              }
             }
           })
           .catch(err => {
