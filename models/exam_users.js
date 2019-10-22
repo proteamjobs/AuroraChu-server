@@ -42,7 +42,8 @@ module.exports = (sequelize, DataTypes) => {
   exam_users.associate = function(models) {
     exam_users.belongsTo(models.users, {
       foreignKey: { name: "fk_user_id", allowNull: false },
-      targetKey: "_id"
+      targetKey: "_id",
+      onDelete: "cascade"
     });
     // marketer_posts.hasMany(models.reviews, {
     //   foreignKey: { name: "fk_post_id", allowNull: false }
