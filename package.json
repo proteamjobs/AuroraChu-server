@@ -9,7 +9,7 @@
     "deploy:dev": "yarn install && pm2 start ecosystem-dev.config.js --env development"
   },
   "dependencies": {
-    "aws-sdk": "^2.517.0",
+    "aws-sdk": "^2.814.0",
     "bcrypt": "^3.0.6",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
